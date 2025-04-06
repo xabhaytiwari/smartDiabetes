@@ -32,6 +32,14 @@ def explore_dataset(path):
     print("\n--- Missing Values ---")
     print(df.isnull().sum())
 
+    print("\n--- Non-Possible Values Check ---")
+    invalid_check_columns = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']
+    for col in invalid_check_columns:
+        if col in df.columns:
+            invalid_count = (df[col] == 0).sum()
+            print(f"{col}: {invalid_count} non-possible (zero) values")
+
+
     print("\n--- Correlation Matrix ---")
     plt.figure(figsize=(10, 8))
     sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
