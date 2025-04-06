@@ -2,6 +2,20 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+from sklearn.linear_model import LinearRegression
+
+def regression_impute(df, targetCol, featureCols):
+    train_data = df[df[targetCol] != 0]
+    test_data = df[df[targetCol] == 0]
+
+    if train_data.empty or test_data.empty:
+        return df
+    
+    model = LinearRegression()
+    model.fit(train_data[featureCols], train_data[targetCol])
+    predicted = model.predict(test_data[featureCols])
+    df.loc[df[targetCol] == 0, targetCol] = predicted
+    return df
 
 def explore_dataset(path):
     if not os.path.exists(path):
@@ -39,6 +53,12 @@ def explore_dataset(path):
             invalid_count = (df[col] == 0).sum()
             print(f"{col}: {invalid_count} non-possible (zero) values")
 
+    print("\n--- Flagging and Imputing Non-Possible Values with Regression ---")
+    for col in invalid_check_columns:
+        if col in df.columns:
+            df[col + '_was_zero'] = (df[col] == 0).astype(int)
+            feature_columns = [c for c in df.columns if c != col and c != 'Outcome' and c not in invalid_check_columns and df[c].dtype != 'object']
+            df = regression_impute(df, col, feature_columns)
 
     print("\n--- Correlation Matrix ---")
     plt.figure(figsize=(10, 8))
