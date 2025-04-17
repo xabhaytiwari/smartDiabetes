@@ -20,10 +20,22 @@ def remove_incosistencies(df):
 
     return df
 
+"""Visualise Target Class Distribution"""
+def plot_target_class_distribution(df):
+    plt.figure(figsize=(6, 4))
+    sns.countplot(data=df, x="Outcome", palette='pastel')
+    plt.title("Target Class Distribution (Outcome)")
+    plt.xlabel('Outcome (0 = No Diabetes), 1 = Diabetes')
+    plt.ylabel('Count')
+    plt.xticks([0, 1], ['No Diabetes', 'Diabetes'])
+    plt.tight_layout()
+    plt.show()
+
+
 "Visualise Missing Data."
 def plot_missing_data(df, title="Missing Data Visualisation"):
     plt.figure(figsize=(10, 6))
-    sns.heatmap(df.isnull(), cbar=False, cmap='viridis', cbar_kws={'label': 'Missing Data'})
+    sns.heatmap(df.isnull(), cbar=True, cmap='viridis', cbar_kws={'label': 'Missing Data'})
     plt.title(title)
     plt.show
 
@@ -91,6 +103,8 @@ def plot_correlation_heatmap(df):
 def main(file_path):
     #Load Data
     df = load_data(file_path)
+
+    plot_target_class_distribution(df)
 
     #Plot missing data before cleaning
     plot_missing_data(df, "Missing data before cleaning")
