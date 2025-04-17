@@ -26,5 +26,3 @@ Thumbs.db
 .env
 .env.*
 
-# Data/model output (optional - based on your folders)
-Models/
