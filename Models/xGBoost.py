@@ -17,7 +17,7 @@ def implement_xGBoost(df):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
     # 3. Train XGBoost Classifier
-    model = XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+    model = XGBClassifier(use_label_encoder=False, eval_metric='logloss', enable_categorical=True)
     model.fit(X_train, y_train)
 
     # 4. Evaluation
