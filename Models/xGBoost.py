@@ -9,7 +9,6 @@ import seaborn as sns
 
 def implement_xGBoost(df):
    
-
     # 1. Prepare X and y
     X = df.drop(columns=['Outcome'])
     y = df['Outcome']
