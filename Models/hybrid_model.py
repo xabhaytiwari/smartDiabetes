@@ -11,6 +11,10 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_auc_score, roc_curve, RocCurveDisplay
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 def feature_engineering(df):
     """Enhanced feature engineering with NaN handling"""
@@ -131,6 +135,23 @@ def run_hybrid_model(df):
     print("\n=== Optimized Hybrid Model Performance ===")
     print(f"Accuracy: {accuracy_score(y_test, hybrid_pred):.2f}")
     print(classification_report(y_test, hybrid_pred))
+
+    y_proba = meta_model.predict_proba(test_stacked)[:, 1]
+    
+    # Idhar se
+
+    print("\n--- Confusion Matrix ---")
+    sns.heatmap(confusion_matrix(y_test, hybrid_pred), annot=True, fmt='d', cmap='Blues')
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.show()
+
+    print("\n--- ROC AUC ---")
+    roc_auc = roc_auc_score(y_test, y_proba)
+    print(f"ROC AUC Score: {roc_auc:.4f}")
+    RocCurveDisplay.from_predictions(y_test, y_proba)
+    plt.show()
 
     # Save models
     # try:
